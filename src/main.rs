@@ -5,18 +5,16 @@ use std::path::Path;
 use std::process::Command;
 
 fn init() -> io::Result<()>{
-    let mut exit = String::from(" ");
 
-    
-    while  exit != "exit".to_string() {
+    loop {
         print!("> ");
         io::stdout().flush()?;
         let mut input = String::new();
         io::stdin().read_line(&mut input)?;
-        let token: Vec<&str> = input.trim().split(' ').collect();
+        let token: Vec<&str> = input.trim().split_whitespace().collect();
         write_history(input.clone());        
         match token[0] {
-            "exit" => { exit = token[0].to_string()}, 
+            "exit" => { break }, 
             "pwd" => { show_pwd() }
             "cd" => { set_current_directory(token[1]) },
             "echo" => { print_echo(token[1])},
@@ -24,6 +22,7 @@ fn init() -> io::Result<()>{
             "clear" => { clear_console()}
             _ => { extern_command(token)}
         }
+        
     }
     Ok(())
 }
